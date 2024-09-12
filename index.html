@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiFi Scanner</title>
+</head>
+<body>
+  <h1>WiFi Scanner</h1>
+  <label for="location">Select Location:</label>
+  <select id="location">
+    <option value="Northern Atrium">Northern Atrium</option>
+    <option value="Northeastern Atrium">Northeastern Atrium</option>
+    <option value="Eastern Atrium">Eastern Atrium</option>
+    <option value="Southeastern Atrium">Southeastern Atrium</option>
+    <option value="Southern Atrium">Southern Atrium</option>
+    <option value="Southwestern Atrium">Southwestern Atrium</option>
+    <option value="Western Atrium">Western Atrium</option>
+    <option value="Northwestern Atrium">Northwestern Atrium</option>
+    <option value="Kitchen">Kitchen</option>
+	<option value="Hallway">Hallway</option>
+    <option value="IT Area">IT Area</option>
+    <option value="Vacations Area">Vacations Area</option>
+    <option value="TravelStore Area">TravelStore Area</option>
+    <option value="Denise Office Area">Denise Office Area</option>
+    <option value="Meetings Area">Meetings Area</option>
+    <option value="Reception">Reception</option>
+  </select>
+  <button id="scanButton">Start Scan</button>
+  <div id="timer">Time remaining: 30 seconds</div>
+  <pre id="output"></pre>
+
+  <script>
+    const scanButton = document.getElementById('scanButton');
+    const locationSelect = document.getElementById('location');
+    const output = document.getElementById('output');
+    const timerDiv = document.getElementById('timer');
+
+    scanButton.addEventListener('click', async () => {
+      const location = locationSelect.value;
+      let timer = 30;
+
+      const updateTimer = () => {
+        timerDiv.textContent = `Time remaining: ${timer} seconds`;
+        timer--;
+        if (timer < 0) {
+          clearInterval(timerInterval);
+        }
+      };
+
+      const timerInterval = setInterval(updateTimer, 1000);
+
+      const result = await window.electron.startScan(location);
+      clearInterval(timerInterval);
+      output.textContent = 'Scan completed.';
+    });
+  </script>
+</body>
+</html>
